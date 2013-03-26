@@ -1,6 +1,8 @@
 %%
 %% syslog_header.erl
 %%
+%% http://tools.ietf.org/html/rfc5424#section-6
+%%
 -module (syslog_header).
 
 -export([parse/1]).
