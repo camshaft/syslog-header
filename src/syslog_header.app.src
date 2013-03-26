@@ -1,0 +1,9 @@
+{application, syslog_header,
+ [
+  {id, "syslog-header"},
+  {description, "Syslog header parser"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [kernel, stdlib]},
+  {env, []}
+ ]}.
