@@ -60,11 +60,11 @@ parse_prefix(<<$<,D1,D2,$>,Version," ",Rest/binary>>)->
 parse_prefix(<<$<,D1,D2,D3,$>,Version," ",Rest/binary>>)->
   {ok, concat_int(D1,D2,D3), concat_int(Version), Rest};
 
-parse_prefix(<<$<,D1,$>,V1:1/binary,V2:1/binary," ",Rest/binary>>)->
+parse_prefix(<<$<,D1,$>,V1,V2," ",Rest/binary>>)->
   {ok, concat_int(D1), concat_int(V1,V2), Rest};
-parse_prefix(<<$<,D1,D2,$>,V1:1/binary,V2:1/binary," ",Rest/binary>>)->
+parse_prefix(<<$<,D1,D2,$>,V1,V2," ",Rest/binary>>)->
   {ok, concat_int(D1,D2), concat_int(V1,V2), Rest};
-parse_prefix(<<$<,D1,D2,D3,$>,V1:1/binary,V2:1/binary," ",Rest/binary>>)->
+parse_prefix(<<$<,D1,D2,D3,$>,V1,V2," ",Rest/binary>>)->
   {ok, concat_int(D1,D2,D3), concat_int(V1,V2), Rest};
 parse_prefix(<<_,Rest/binary>>)->
   parse_prefix(Rest).
@@ -104,98 +104,87 @@ parse_hostname(<<C:1/binary, Rest/binary>>, Acc)->
 parse_system(<<>>)->
   error;
 parse_system(Bin)->
-  parse_system(Bin, <<>>, <<>>, unknown).
+  find_app_name(Bin, <<>>).
 
-parse_system(<<>>, _, <<>>, _)->
-  error;
-parse_system(<<" - - ",_/binary>>, _, <<>>, _)->
-  error;
-parse_system(<<" - - ",Rest/binary>>, AppName, ProcID, proc_id)->
+find_app_name(<<" ",Rest/binary>>, <<>>=AppName)->
+  find_app_name(Rest, AppName);
+find_app_name(<<" ",Rest/binary>>, AppName)->
+  find_proc_id(Rest, AppName, <<>>);
+find_app_name(<<C:1/binary,Rest/binary>>, AppName)->
+  find_app_name(Rest, <<AppName/binary,C/binary>>).
+
+find_proc_id(<<" ",Rest/binary>>, AppName, <<>>=ProcID)->
+  find_proc_id(Rest, AppName, ProcID);
+find_proc_id(<<" ",Rest/binary>>, AppName, ProcID)->
+  message_id(Rest, AppName, ProcID);
+find_proc_id(<<C:1/binary,Rest/binary>>, AppName, ProcID)->
+  find_proc_id(Rest, AppName, <<ProcID/binary,C/binary>>).
+
+%% This is pretty messy... :/ - we get about 10,000 message/sec more with it
+message_id(<<"- - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, undefined, Rest};
-
-%% This is pretty messy... :/
-parse_system(<<" - ",C:1/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:1/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:2/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:2/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:3/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:3/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:4/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:4/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:5/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:5/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:6/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:6/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:7/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:7/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:8/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:8/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:9/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:9/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:10/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:10/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:11/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:11/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:12/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:12/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:13/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:13/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:14/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:14/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:15/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:15/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:16/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:16/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:17/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:17/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:18/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:18/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:19/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:19/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:21/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:21/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:22/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:22/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:23/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:23/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:24/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:24/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:25/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:25/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:26/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:26/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:27/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:27/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:28/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:28/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:29/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:29/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:31/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:31/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-parse_system(<<" - ",C:32/binary," - ",Rest/binary>>, AppName, ProcID, proc_id)->
+message_id(<<"- ",C:32/binary," - ",Rest/binary>>, AppName, ProcID)->
   {ok, AppName, ProcID, C, Rest};
-
-%% Switch the mode to 'proc_id'
-parse_system(<<" ",Rest/binary>>, AppName, ProcID, app_name)->
-  parse_system(Rest, AppName, ProcID, proc_id);
-
-%% 'app_name' mode
-parse_system(<<C:1/binary,Rest/binary>>, AppName, ProcID, app_name)->
-  parse_system(Rest, <<AppName/binary,C/binary>>, ProcID, app_name);
-%% 'proc_id' mode
-parse_system(<<C:1/binary,Rest/binary>>, AppName, ProcID, proc_id)->
-  parse_system(Rest, AppName, <<ProcID/binary,C/binary>>, proc_id);
-
-%% unknown
-parse_system(<<" ",Rest/binary>>, AppName, ProcID, unknown)->
-  parse_system(Rest, AppName, ProcID, unknown);
-
-%% Switch the mode to 'app_name'
-parse_system(<<C:1/binary,Rest/binary>>, _, ProcID, unknown)->
-  parse_system(Rest, C, ProcID, app_name);
-
-parse_system(<<_,Rest/binary>>, AppName, ProcID, Mode)->
-  parse_system(Rest, AppName, ProcID, Mode).
+message_id(_, _, _)->
+  error.
 
 %% @doc concatenate integers
 %% @private

@@ -17,10 +17,10 @@
     ]
   },
   {
-    <<"<40>1 2013-03-21T22:52:26+00:00 d.de02fad5-ca75-4863-8d0a-de58404f9225 heroku web.1 - - source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>,
+    <<"<40>12 2013-03-21T22:52:26+00:00 d.de02fad5-ca75-4863-8d0a-de58404f9225 heroku web.1 - - source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>,
     [
       {priority, 40},
-      {version, 1},
+      {version, 12},
       {timestamp, {{2013,03,21},{22,52,26}}},
       {hostname, <<"d.de02fad5-ca75-4863-8d0a-de58404f9225">>},
       {app_name, <<"heroku">>},
@@ -32,6 +32,38 @@
 ]).
 
 -define (PARSE_SYSTEM_TESTS, [
+  {
+    <<"heroku web.1 - 1 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"1">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 12 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"12">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 123 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"123">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 1234 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"1234">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 12345 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"12345">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 123456 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"123456">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 1234567 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"1234567">>,<<"rest">>}
+  },
+  {
+    <<"heroku web.1 - 12345678 - rest">>,
+    {<<"heroku">>,<<"web.1">>,<<"12345678">>,<<"rest">>}
+  },
   {
     <<"heroku web.1 - - source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>,
     {<<"heroku">>,<<"web.1">>,undefined,<<"source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>}
