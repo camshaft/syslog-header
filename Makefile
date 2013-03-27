@@ -7,8 +7,11 @@ all: deps compile
 compile:
 	$(REBAR) compile
 
-bench: compile
-	./test/syslog_header_benchmark
+test/syslog_header_benchmark.beam: test/syslog_header_benchmark.erl
+	erlc -o test test/syslog_header_benchmark.erl
+
+bench: compile test/syslog_header_benchmark.beam
+	./test/benchmark
 
 deps:
 	$(REBAR) get-deps
