@@ -1,3 +1,7 @@
 language: erlang
+script:
+  - make compile
+  - make test
+  - make bench
 otp_release:
   - R16B
