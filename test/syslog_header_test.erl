@@ -31,57 +31,8 @@
   }
 ]).
 
--define (PARSE_SYSTEM_TESTS, [
-  {
-    <<"heroku web.1 - 1 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"1">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 12 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"12">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 123 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"123">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 1234 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"1234">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 12345 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"12345">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 123456 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"123456">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 1234567 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"1234567">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - 12345678 - rest">>,
-    {<<"heroku">>,<<"web.1">>,<<"12345678">>,<<"rest">>}
-  },
-  {
-    <<"heroku web.1 - - source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>,
-    {<<"heroku">>,<<"web.1">>,undefined,<<"source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>}
-  },
-  {
-    <<" heroku web.1 - - source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>,
-    {<<"heroku">>,<<"web.1">>,undefined,<<"source=heroku.6041702.web.1.dabb0da6-d9d5-4627-a299-0b218adf1d3e measure=load_avg_1m val=0.00\n">>}
-  }
-]).
-
 parse_test_()->
   [fun() -> run_parse_test(Test) end || Test <- ?PARSE_TESTS].
 run_parse_test({Message, Expected})->
   {ok, Msg} = syslog_header:parse(Message),
   ?assertEqual(Expected, Msg).
-
-parse_system_test_()->
-  [fun() -> run_parse_system_test(Test) end || Test <- ?PARSE_SYSTEM_TESTS].
-run_parse_system_test({Buffer, Expected})->
-  {ok, System, Dyno, MessageId, Rest} = syslog_header:parse_system(Buffer),
-  ?assertEqual(Expected, {System, Dyno, MessageId, Rest}).
