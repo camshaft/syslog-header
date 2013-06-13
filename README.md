@@ -21,7 +21,7 @@ $ make bench
 ./rebar compile
 ==> syslog-header (compile)
 ./test/benchmark
-1000000 iterations in 6.793529s
-147198.9006008512 messages/sec
+1000000 iterations in 2.414033s
+414244.5442957905 messages/sec
 
 ```
