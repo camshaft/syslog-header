@@ -5,11 +5,20 @@
 %%
 -module (syslog_header).
 
+-type priority() :: pos_integer().
+-type version() :: pos_integer().
+-type hostname() :: binary().
+-type app_name() :: binary().
+-type proc_id() :: binary().
+-type message_id() :: binary().
+-type message() :: binary().
+-type header() :: {priority(), version(), calendar:datetime(), hostname(), app_name(), proc_id(), message_id(), message()}.
+
 -export([parse/1]).
 
 %% @doc Parse a syslog header
 %% @public
--spec parse(binary()) -> {ok, [{atom(), binary()}], binary()}.
+-spec parse(binary()) -> {ok, header()} | {error, term()}.
 parse(Frame)->
   case parse_prefix(Frame) of
     {ok, Priority, Version, Rest} ->
@@ -23,7 +32,7 @@ parse(Frame)->
                     {ok, ProcID, Rest5} ->
                       case parse_message_id(Rest5) of
                         {ok, MessageID, Message} ->
-                          construct_event(Priority, Version, Timestamp, Hostname, AppName, ProcID, MessageID, Message);
+                          {ok, {Priority, Version, Timestamp, Hostname, AppName, ProcID, MessageID, Message}};
                         _ -> {error, message_id}
                       end;
                     _ -> {error, proc_id}
@@ -36,18 +45,6 @@ parse(Frame)->
       end;
     _ -> {error, prefix}
   end.
-
-construct_event(Priority, Version, Timestamp, Hostname, AppName, ProcID, MessageID, Message)->
-  {ok, [
-    {priority, Priority},
-    {version, Version},
-    {timestamp, Timestamp},
-    {hostname, Hostname},
-    {app_name, AppName},
-    {proc_id, ProcID},
-    {message_id, MessageID},
-    {message, Message}
-  ]}.
 
 %% @doc prefix pattern
 %% @example <140>1
