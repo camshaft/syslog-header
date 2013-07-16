@@ -73,11 +73,85 @@ parse_prefix(<<_,Rest/binary>>)->
 -spec parse_date(binary()) -> {ok, calendar:datetime()} | error.
 parse_date(<<>>)->
   error;
+
+% +
 parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
   Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
   Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
   {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,_MS8,$+,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+
+% -
 parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,_MS8,$-,_Tz1,_Tz2,$:,_Tz3,_Tz4," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+
+% Z
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,$Z," ",Rest/binary>>)->
   Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
   Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
   {ok, {Date, Time}, Rest};
@@ -89,6 +163,27 @@ parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,
   Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
   Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
   {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,$Z," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,$Z," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,$Z," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,$Z," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+parse_date(<<Y1,Y2,Y3,Y4,$-,M1,M2,$-,D1,D2,$T,H1,H2,$:,Mn1,Mn2,$:,S1,S2,$.,_MS1,_MS2,_MS3,_MS4,_MS5,_MS6,_MS7,_MS8,$Z," ",Rest/binary>>)->
+  Time = {concat_int(H1,H2), concat_int(Mn1,Mn2), concat_int(S1,S2)},
+  Date = {concat_int(Y1,Y2,Y3,Y4), concat_int(M1,M2), concat_int(D1,D2)},
+  {ok, {Date, Time}, Rest};
+
 parse_date(<<_,Rest/binary>>)->
   parse_date(Rest).
 
