@@ -1,4 +1,4 @@
-syslog-header [![Build Status](https://travis-ci.org/CamShaft/syslog-header.png)](https://travis-ci.org/CamShaft/syslog-header)
+syslog-header [![Build Status](https://travis-ci.org/camshaft/syslog-header.png)](https://travis-ci.org/camshaft/syslog-header)
 =============
 
 Syslog header parser
