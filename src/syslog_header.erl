@@ -1130,6 +1130,8 @@ parse_message_id(<<"- ",MessageID:31/binary," - ",Message/binary>>)->
   {ok, MessageID, Message};
 parse_message_id(<<"- ",MessageID:32/binary," - ",Message/binary>>)->
   {ok, MessageID, Message};
+parse_message_id(<<"- ",Message/binary>>)->
+  {ok, undefined, Message};
 parse_message_id(_)->
   error.
 
